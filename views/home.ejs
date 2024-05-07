@@ -6,9 +6,16 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Hellow from the server</h1>
-    <% urls.forEach(url => { %>
-     <li><%= url.shortUrl %></li>
-    <% }) %>
+   <h1>URL Shortner</h1>
+   <% if (locals.id) { %>
+    <p>URL Generated: https://localhost:8001/url/<%= id %></p>
+   <% } %>
+   <div>
+    <form method="post" action="/url">
+   <label>Enter your orignal URL</label>
+   <input type="text" name="url" placeholder="https://example.com"/>
+<button type="submit">Generate</button>
+</form>
+</div>
 </body>
 </html>
