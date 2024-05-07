@@ -2,13 +2,22 @@ const express = require("express");
 const urlRoute=require("./routers/url");
 const {connectToMongoDB}=require("./connect");
 const URL= require("./models/url");
+const path=require("path");
 const app= express();
 const PORT=8001;
 connectToMongoDB("mongodb://127.0.0.1:27017/short-url").then(()=>console.log("MongoDB Connected"));
 
 app.use(express.json());
 app.use("/url",urlRoute);
+app.set("view engine","ejs");
+app.set("views",path.resolve("views"));
 
+app.get("/test",async (req,res)=>{
+    const allUrls= await URL.find({});
+    return res.render("home",{
+     urls:allUrls,
+    });
+});
 app.get("/url/:shortID", async (req, res) => {
     const shortID = req.params.shortID;
     const entry = await URL.findOneAndUpdate(
