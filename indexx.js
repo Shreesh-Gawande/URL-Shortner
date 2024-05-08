@@ -1,8 +1,9 @@
 const express = require("express");
-
 const {connectToMongoDB}=require("./connect");
 const URL= require("./models/url");
 const path=require("path");
+const cookieParser= require("cookie-parser");
+const {accessToLogidinUserOnly}= require("./middlewares/auth")
 
 const urlRoute=require("./routers/url");
 const staticRoute=require("./routers/staticRouter");
@@ -14,8 +15,9 @@ connectToMongoDB("mongodb://127.0.0.1:27017/short-url").then(()=>console.log("Mo
 
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
+app.use(cookieParser());
 
-app.use("/url",urlRoute);
+app.use("/url",accessToLogidinUserOnly, urlRoute);
 app.use("/",staticRoute);
 app.use("/user",userRoute)
 
