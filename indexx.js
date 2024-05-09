@@ -3,7 +3,7 @@ const {connectToMongoDB}=require("./connect");
 const URL= require("./models/url");
 const path=require("path");
 const cookieParser= require("cookie-parser");
-const {accessToLogidinUserOnly}= require("./middlewares/auth")
+const {accessToLogidinUserOnly,checkAuth}= require("./middlewares/auth")
 
 const urlRoute=require("./routers/url");
 const staticRoute=require("./routers/staticRouter");
@@ -18,7 +18,7 @@ app.use(express.urlencoded({extended:false}));
 app.use(cookieParser());
 
 app.use("/url",accessToLogidinUserOnly, urlRoute);
-app.use("/",staticRoute);
+app.use("/",checkAuth,staticRoute);
 app.use("/user",userRoute)
 
 app.set("view engine","ejs");
